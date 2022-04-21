@@ -40,11 +40,12 @@ if (!__dir_name) {
 
 // user should have the possibility to set it to '' to allow all.
 let defaultFileFilter = (
+    'video/mp4 | video/x-m4v | video/* | audio/x-m4a | audio/* |' + // mime types
     'zip | tar.gz | 7z | 7zip | tar | gz | tgz | tbz | tar.bz2 | tar.bz | ' + // packed files
     'txt | md | doc | docx | otf | ppt | pptx | xls | xlsx | csv | indd |' + // text and doc formats
     'jpg | jpeg | heic | heif | png | ps |' +  // pixel images
     'svg | ai | ' + // vector images
-    'avi | mp4 | mpg | wav | flac | mpeg | mov ' // media formats
+    'avi | mp4 | mpg | wav | flac | m4a | aac | mpeg | mov ' // media formats
 ).replaceAll(' ', '');
 
 
