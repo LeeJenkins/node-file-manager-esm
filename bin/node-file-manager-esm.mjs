@@ -112,7 +112,7 @@ let defaultFileFilter =
     global.NODEFILEMANAGER = {
         BASEPATH: path.resolve(__dir_name, '../'),
         DATA_ROOT: argv.directory || process.cwd(),
-        FILEFILTER: argv.filter || defaultFileFilter.replace(' ', '')
+        FILEFILTER: argv.filter.replaceAll(' ', '')
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
