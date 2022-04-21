@@ -142,7 +142,7 @@ let defaultFileFilter = 'zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jp
         app.use(async function auth(ctx, next) {
             debug('fm:auth')('check');
 
-            await basic.check(ctx.req, ctx.res, async (req, res, err) => {
+            let check = basic.check( function basicCheck(req, res, err) {
                 if (err) {
                     debug('fm:auth:error')(err);
                     throw err;
@@ -150,6 +150,8 @@ let defaultFileFilter = 'zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jp
                     debug('fm:auth')('passed.');
                 }
             });
+
+            check(ctx.req, ctx.res);
 
             await next();
         });
