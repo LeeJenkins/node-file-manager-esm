@@ -44,7 +44,7 @@ if (!__dir_name) {
 
     // broken node 13.8
     //import package_json from './package.json';
-    const package_json = JSON.parse(await fs.readFile('package.json', 'utf-8'));
+    const package_json = JSON.parse(await fs.readFile(__dir_name + '/../package.json', 'utf-8'));
 
     let argv = optimist
         .usage(['USAGE: $0 [-p <port>] [-d <directory>]'])
