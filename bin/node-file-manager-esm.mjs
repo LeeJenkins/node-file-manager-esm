@@ -140,7 +140,7 @@ let defaultFileFilter =
         let htpasswd = path.resolve(process.cwd(), (typeof argv.secure == 'string' ? argv.secure : './htpasswd'));
 
         let basic = auth.basic({
-            realm: 'File manager',
+            realm: 'File Manager',
             file: htpasswd
         });
 
