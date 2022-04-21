@@ -39,6 +39,9 @@ if (!__dir_name) {
     __dir_name = (() => {let x = path.dirname(decodeURI(new url.URL(im.url).pathname)); return path.resolve( (process.platform == "win32") ? x.substr(1) : x ); })(); // fix node module
 }
 
+// user should have the possibility to set it to '' to allow all.
+let defaultFileFilter = 'zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jpg|png|avi|mp4';
+
 
 (async _=> {
 
@@ -60,7 +63,7 @@ if (!__dir_name) {
         })
         .option('filter', {
             alias: 'f',
-            default: process.env.FM_FILTER || undefined,
+            default: process.env.FM_FILTER || defaultFileFilter,
             description: 'Important files to filter for. Example: zip|mp4|txt'
         })
         .option('secure', {
@@ -70,7 +73,7 @@ if (!__dir_name) {
         })
         .option('version', {
             alias: 'v',
-            description: 'Server　Version'
+            description: 'Server Version'
         })
         .option('logging', {
             alias: 'l',
@@ -105,7 +108,7 @@ if (!__dir_name) {
     global.NODEFILEMANAGER = {
         BASEPATH: path.resolve(__dir_name, '../'),
         DATA_ROOT: argv.directory || process.cwd(),
-        FILEFILTER: argv.filter || 'zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jpg|png|avi|mp4'
+        FILEFILTER: argv.filter || defaultFileFilter
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
@@ -130,7 +133,7 @@ if (!__dir_name) {
 
     // Enable auth. KOA compatible. htpasswd file.
     if (argv.secure) {
-        let htpasswd = path.resolve(__dir_name, (typeof argv.secure == 'string' ? argv.secure : './htpasswd'));
+        let htpasswd = path.resolve(process.cwd(), (typeof argv.secure == 'string' ? argv.secure : './htpasswd'));
 
         let basic = auth.basic({
             realm: 'File manager',

@@ -90,7 +90,7 @@ There are some configuration options for the commandline
 - `-f` | `--filter string` -- [zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jpg|png|avi|mp4] pattern, seperated by |
 - `-s` | `--secure <string>` -- is off by default, set it use BASIC-AUTH with the .htpasswd of the path provided, or leave empty for the htpasswd within the bin directory (default login is adam:adam)
 - `-v` | `--version` -- show the version number
-- `-l` | `--logging <string>` -- output logging info [using just `-l` or `--logging` resolves to `--logging *` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]
+- `-l` | `--logging <string>` -- output logging info [using just `-l` or `--logging` resolves to `--logging '*'` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]
 - `-o` | `--open` -- Open the website to this service (localhost with selected port)
 
 ## Environment variables
@@ -106,11 +106,11 @@ Fallback, if no param was used
 ## HTTP Basic Auth
 The app is protected with simple http basic auth, so it's recommended to use it just over TLS (HTTPS). Let's Encrypt is your friend. ;)
 
-## Shortcut
+### Shortcut
 Google for "online htpasswd generator". The more secure way is getting the required tools to generate a htpasswd file.
 
-## Manual setup
-If you use linux you can simply use `htpasswd` comming with `apache2-utils` (on Debian/Ubuntu)
+### Manual setup
+If you use linux/mac you can simply use `htpasswd` comming with `apache2-utils` (on Debian/Ubuntu)
 
 On Debian/Ubuntu do:
 ```bash
@@ -118,7 +118,9 @@ sudo apt-get update
 sudo apt-get -y install apache2-utils
 ```
 
-## Manually add a user
+On Mac, it is included.
+
+### Manually add a user
 The following command creates a new `htpasswd` file in the current folder with the user `peter`. After creating a new file copy it into the `lib` dir of the app or append the content of the new file to the existing one.
 ```bash
 htpasswd -c ./htpasswd adam
