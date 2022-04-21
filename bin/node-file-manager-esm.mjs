@@ -11,7 +11,7 @@ if (process.env.FM_LOGGING) {
 }
 process.argv.forEach((val, index) => {
   let params = val.split('=');
-  if ('--log' == params[0].toLocaleLowerCase() || '-l' == params[0].toLocaleLowerCase()) {
+  if ('--logging' == params[0].toLocaleLowerCase() || '-l' == params[0].toLocaleLowerCase()) {
     let param = params.length == 2 ? params.pop() : (params.length == 1 && process.argv[index +1] && process.argv[index +1][0] != '-' ? process.argv[index +1] : '*');
     argv_logging = param;
     debug.enable('fm:' + param);
@@ -23,7 +23,6 @@ import url from 'url';
 import auth from 'http-auth';
 import path from 'path';
 import Koa from 'koa';
-import mount from 'koa-mount';
 import koaStatic from 'koa-static';
 import open from 'open';
 import optimist from 'optimist';
@@ -78,7 +77,7 @@ let defaultFileFilter = 'zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jp
         .option('logging', {
             alias: 'l',
             default: process.env.FM_LOGGING || undefined,
-            description: 'output logging info [using just `-l` or `--logging` resolves to `--logging *` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]'
+            description: 'output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`'
         })
         .option('open', {
             alias: 'o',
