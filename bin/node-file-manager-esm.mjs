@@ -39,12 +39,13 @@ if (!__dir_name) {
 }
 
 // user should have the possibility to set it to '' to allow all.
-let defaultFileFilter =
+let defaultFileFilter = (
     'zip | tar.gz | 7z | 7zip | tar | gz | tgz | tbz | tar.bz2 | tar.bz | ' + // packed files
     'txt | md | doc | docx | otf | ppt | pptx | xls | xlsx | csv | indd |' + // text and doc formats
     'jpg | jpeg | heic | heif | png | ps |' +  // pixel images
     'svg | ai | ' + // vector images
-    'avi | mp4 | mpg | wav | flac | mpeg | mov '; // media formats
+    'avi | mp4 | mpg | wav | flac | mpeg | mov ' // media formats
+).replaceAll(' ', '');
 
 
 (async _=> {
@@ -112,7 +113,7 @@ let defaultFileFilter =
     global.NODEFILEMANAGER = {
         BASEPATH: path.resolve(__dir_name, '../'),
         DATA_ROOT: argv.directory || process.cwd(),
-        FILEFILTER: argv.filter.replaceAll(' ', '')
+        FILEFILTER: argv.filter
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
