@@ -47,8 +47,9 @@ let defaultFileFilter = (
     'avi | mp4 | mpg | wav | flac | m4a | aac | mpeg | mov ' // media formats
 ).replaceAll(' ', '');
 
-// handle mime types by prepending to file selection?
-//'video/mp4 | video/x-m4v | video/* | audio/x-m4a | audio/*'
+let defaultMimeFilter = (
+    'video/* | audio/* | image/* '  // mime types, important to mobile phones (android)
+).replaceAll(' ', '');
 
 (async _=> {
 
@@ -72,6 +73,11 @@ let defaultFileFilter = (
             alias: 'f',
             default: process.env.FM_FILTER || defaultFileFilter,
             description: 'Important files to filter for. Example: zip|mp4|txt'
+        })
+        .option('mimefilter', {
+            alias: 'mf',
+            default: process.env.FM_MIMEFILTER || defaultMimeFilter,
+            description: 'Only for file selection. Example: video/*|image/*'
         })
         .option('secure', {
             alias: 's',
@@ -119,6 +125,7 @@ let defaultFileFilter = (
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
+    dso('--mimefilter:', NODEFILEMANAGER.MIMEFILTER);
     dso('--secure:', 'secure' in argv ? argv.secure : 'undefined');
     dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'undefined'); // preserve 'true' for no value
 
