@@ -192,7 +192,7 @@
     <nav class="navbar navbar-default navbar-static-top navbar-light bg-light">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">File Manager</a>
+          <a class="navbar-brand" href="#">File Manager</a> <small>v.%version%</small>
         </div>
       </div>
     </nav>
@@ -277,7 +277,9 @@
               <progress ng-show="curFilesMeta[file.relPath] !== undefined"
                 value="{{curFilesMeta[file.relPath].currentSize}}" max="{{curFilesMeta[file.relPath].size}}"></progress>
             </td>
-            <td>{{curFilesMeta[file.relPath].humanSize || file.humanSize}}</td>
+            <td>{{curFilesMeta[file.relPath].humanSizeCurrent ? curFilesMeta[file.relPath].humanSizeCurrent :
+              file.humanSize}} <small ng-show="curFilesMeta[file.relPath] !== undefined"><br> /
+                {{curFilesMeta[file.relPath].humanSize}}</small></td>
             <td>{{file.humanTime}}</td>
           </tr>
         </tbody>

@@ -129,7 +129,8 @@ let defaultMimeFilter = (
         DATA_ROOT: argv.directory || process.cwd(),
         FILEFILTER: argv.filter,
         MIMEFILTER: argv.mimefilter,
-        MAXSIZE: argv.maxsize * 1024 * 1024
+        MAXSIZE: argv.maxsize * 1024 * 1024,
+        VERSION: package_json.version
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--secure:', 'secure' in argv ? argv.secure : 'undefined');
