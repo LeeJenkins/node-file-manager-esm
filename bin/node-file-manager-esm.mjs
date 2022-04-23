@@ -10,12 +10,12 @@ if (process.env.FM_LOGGING) {
     argv_logging = process.env.FM_LOGGING;
 }
 process.argv.forEach((val, index) => {
-  let params = val.split('=');
-  if ('--logging' == params[0].toLocaleLowerCase() || '-l' == params[0].toLocaleLowerCase()) {
-    let param = params.length == 2 ? params.pop() : (params.length == 1 && process.argv[index +1] && process.argv[index +1][0] != '-' ? process.argv[index +1] : '*');
-    argv_logging = param;
-    debug.enable('fm:' + param);
-  }
+    let params = val.split('=');
+    if ('--logging' == params[0].toLocaleLowerCase() || '-l' == params[0].toLocaleLowerCase()) {
+        let param = params.length == 2 ? params.pop() : (params.length == 1 && process.argv[index + 1] && process.argv[index + 1][0] != '-' ? process.argv[index + 1] : '*');
+        argv_logging = param;
+        debug.enable('fm:' + param);
+    }
 });
 
 
@@ -35,7 +35,7 @@ const dso = debug('fm:options');
 let __dir_name = (typeof __dirname !== 'undefined') ? __dirname : '';
 if (!__dir_name) {
     const im = import.meta;
-    __dir_name = (() => {let x = path.dirname(decodeURI(new url.URL(im.url).pathname)); return path.resolve( (process.platform == "win32") ? x.substr(1) : x ); })(); // fix node module
+    __dir_name = (() => { let x = path.dirname(decodeURI(new url.URL(im.url).pathname)); return path.resolve((process.platform == "win32") ? x.substr(1) : x); })(); // fix node module
 }
 
 // user should have the possibility to set it to '' to allow all.
@@ -51,7 +51,8 @@ let defaultMimeFilter = (
     'video/* | audio/* | image/* '  // mime types, important to mobile phones (android)
 ).replaceAll(' ', '');
 
-(async _=> {
+
+(async _ => {
 
     // broken node 13.8
     //import package_json from './package.json';
@@ -121,7 +122,8 @@ let defaultMimeFilter = (
     global.NODEFILEMANAGER = {
         BASEPATH: path.resolve(__dir_name, '../'),
         DATA_ROOT: argv.directory || process.cwd(),
-        FILEFILTER: argv.filter
+        FILEFILTER: argv.filter,
+        MIMEFILTER: argv.mimefilter
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
@@ -130,8 +132,8 @@ let defaultMimeFilter = (
     dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'undefined'); // preserve 'true' for no value
 
     // Start Server
-    let startServer = function(app, port) {
-        app.listen(port, function() { if (argv.open) open('http://localhost:' + port); });
+    let startServer = function (app, port) {
+        app.listen(port, function () { if (argv.open) open('http://localhost:' + port); });
         d('listening on *:' + port);
     };
 
@@ -157,7 +159,7 @@ let defaultMimeFilter = (
         app.use(async function auth(ctx, next) {
             debug('fm:auth')('check');
 
-            let check = basic.check( function basicCheck(req, res, err) {
+            let check = basic.check(function basicCheck(req, res, err) {
                 if (err) {
                     debug('fm:auth:error')(err);
                     throw err;

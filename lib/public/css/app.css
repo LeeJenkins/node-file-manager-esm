@@ -3,6 +3,7 @@
     height: 1em;
     background: rgb(115, 230, 0);
 }
+
 .toast div.rounded.error {
     background: rgb(255, 65, 65);
 }
@@ -22,23 +23,24 @@
     cursor: pointer;
 }
 
-.btn-toolbar > * {
+.btn-toolbar>* {
     margin-top: .2em;
-    margin-left: 0; 
+    margin-left: 0;
     margin-right: 0 !important;
 }
-.btn-toolbar > * > * {
+
+.btn-toolbar>*>* {
     margin-right: 0 !important;
 }
 
 .delete-button {
-    border-top-left-radius: 0; 
-    border-bottom-left-radius: 0; 
+    /*border-top-left-radius: 0;
+    border-bottom-left-radius: 0;*/
     height: 100%;
 }
 
 .breadcrumb .icon-home {
-    line-height: 1.5em; 
+    line-height: 1.5em;
     padding-right: .5em;
 }
 
@@ -48,7 +50,8 @@
 input[type=checkbox],
 input[type=radio] {
     position: relative;
-    appearance: none; -webkit-appearance: none;
+    appearance: none;
+    -webkit-appearance: none;
     font-size: inherit;
     width: 1em;
     margin: 0;
@@ -58,16 +61,18 @@ input[type=radio] {
     font-weight: 900;
     transition: 300ms ease-out;
 }
+
 input[type=checkbox]::after,
 input[type=radio]::after {
-    content: "\f111"; /* circle */
+    content: "\f111";
+    /* circle */
     display: inline-block;
     text-align: center;
     width: 1em;
     transition: 300ms ease-out;
     color: white;
     text-shadow: 0 0 2px black;
-    }
+}
 
 input[type=radio]:checked::after {
     font-weight: 900;
@@ -77,16 +82,23 @@ input[type=radio]:active {
     transform: scale(.6);
 }
 
-input[type=radio] + span {
+input[type=radio]+span {
     margin-left: .35em;
 }
 
 input[type=checkbox]:checked::after {
-    content: "\f058"; /* check-circle */
+    content: "\f058";
+    /* check-circle */
     color: inherit;
     text-shadow: 0 0 2px transparent;
 }
 
 input[type=radio]:checked::after {
-    content: "\f192"; /* dot-circle */
+    content: "\f192";
+    /* dot-circle */
+}
+
+.filerow progress {
+    display: block;
+    width: 100%;
 }
