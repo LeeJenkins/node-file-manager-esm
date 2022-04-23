@@ -59,7 +59,7 @@ Then, we can view http://localhost:8080/ in our browser.
 
 ```js
 import fm from 'app-filemanager-esm';
-var appFm = fm('/tmp/uploadpath', 'zip|txt|mp4').app; // see params: d & f
+var appFm = fm('/tmp/uploadpath', 'zip|txt|mp4', 'image/*', 300).app; // see CLI params below: -d & -f & -mf & -m (only -d is required)
 mainApp.use(mount('/fm', appFm));
 ```
 
@@ -73,10 +73,12 @@ So we can use it as koa app, mounted within another koa instance.
 - reduced dependencies
 - added support for big files (v3.2.0)
 - upload progress and file updates for all connected clients (v3.2.0)
+- max upload filesize (v3.2.0)
+- handling of canceled files (v3.2.0)
 - full standalone support (v3.2.0)
-- relative paths support for `--directory` and `--secure` (v3.2.0)
+  - relative paths support for `--directory` and `--secure` (v3.2.0) 
 
-# ES6: ESM
+# Note about ES6: ESM support
 The `Michael Jackson Script` or `.mjs` (or` modular JS`) extension is used by NodeJs to detect ECMAScript Modules with the `--experimental-modules` flag in NodeJS prior to v13. Since Babel does have problems `import.meta`, the `esm` npm module is used to transpill the code for older node versions. See the files within the `./bin` folder.
 
 # Standalone / CLI
@@ -92,11 +94,12 @@ There are some configuration options for the commandline
 
 - `-p`  | `--port <int>` -- [5000] can be set as environment variable PORT 
 - `-d`  | `--directory <string>` -- [current path] the path to provide the files from (realative path possible: `./data`)
+- `-s`  | `--secure <string>` -- [] is off by default, set it use BASIC-AUTH with the .htpasswd of the path provided, or leave empty for the htpasswd within the bin directory (default login is adam:adam) (realative path possible: `./htpasswd`)
+- `-m`  | `--maxsize <int>` -- [300] the max file size for uploads in MB
+- `-l`  | `--logging <string>` -- [] output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`] To see all possible output, set `DEBUG=*`
 - `-f`  | `--filter <string|null>` -- [zip|tar.gz|7z|...] pattern, seperated by `|`
 - `-mf` | `--mimefilter <string>` -- [video/*|audio/*|image/*] only for file selection, example: `video/*|image/*`
-- `-s`  | `--secure <string>` -- [] is off by default, set it use BASIC-AUTH with the .htpasswd of the path provided, or leave empty for the htpasswd within the bin directory (default login is adam:adam) (realative path possible: `./htpasswd`)
 - `-v`  | `--version` -- show the version number
-- `-l`  | `--logging <string>` -- [] output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`] To see all possible output, set `DEBUG=*`
 - `-o`  | `--open` -- Open the website to this service (localhost with selected port)
 
 ## Environment variables
@@ -104,10 +107,11 @@ Fallback, if no param was used
 
 - `FM_PORT` -- like `--port` -- if no port param was given, tries `FM_PORT` then `PORT` 
 - `FM_DIRECTORY` -- like `--directory`
+- `FM_SECURE` -- like `--secure`
+- `FM_MAXSIZE` -- like `--maxsize`
+- `FM_LOGGING` -- like `--logging`
 - `FM_FILTER` -- like `--filter`
 - `FM_MIMEFILTER` -- like `--mimefilter`
-- `FM_SECURE` -- like `--secure`
-- `FM_LOGGING` -- like `--logging`
 
 ## HTTP Basic Auth
 The app is protected with simple http basic auth, so it's recommended to use it just over TLS (HTTPS). Let's Encrypt is your friend. ;)

@@ -59,7 +59,7 @@ let defaultMimeFilter = (
     const package_json = JSON.parse(await fs.readFile(__dir_name + '/../package.json', 'utf-8'));
 
     let argv = optimist
-        .usage(['USAGE: $0 [-p <port>] [-d <directory>]'])
+        .usage(['USAGE: $0 [-p <port>] [-d <directory>] ...'])
         .option('port', {
             alias: 'p',
             default: process.env.FM_PORT || process.env.PORT || 5000,
@@ -69,6 +69,21 @@ let defaultMimeFilter = (
             alias: 'd',
             default: process.env.FM_DIRECTORY || undefined,
             description: 'The path to provide the files from'
+        })
+        .option('secure', {
+            alias: 's',
+            default: process.env.FM_SECURE || undefined,
+            description: 'Use BASIC-AUTH with the htpasswd of the path provided, or the htpasswd within the current bin directory (default login is adam:adam)'
+        })
+        .option('maxsize', {
+            alias: 'm',
+            default: process.env.FM_MAXSIZE || '300',
+            description: 'Set the max filesize in MB'
+        })
+        .option('logging', {
+            alias: 'l',
+            default: process.env.FM_LOGGING || undefined,
+            description: 'output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`'
         })
         .option('filter', {
             alias: 'f',
@@ -80,19 +95,9 @@ let defaultMimeFilter = (
             default: process.env.FM_MIMEFILTER || defaultMimeFilter,
             description: 'Only for file selection. Example: video/*|image/*'
         })
-        .option('secure', {
-            alias: 's',
-            default: process.env.FM_SECURE || undefined,
-            description: 'Use BASIC-AUTH with the htpasswd of the path provided, or the htpasswd within the current bin directory (default login is adam:adam)'
-        })
         .option('version', {
             alias: 'v',
-            description: 'Server Version'
-        })
-        .option('logging', {
-            alias: 'l',
-            default: process.env.FM_LOGGING || undefined,
-            description: 'output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`'
+            description: 'Show server version'
         })
         .option('open', {
             alias: 'o',
@@ -123,13 +128,15 @@ let defaultMimeFilter = (
         BASEPATH: path.resolve(__dir_name, '../'),
         DATA_ROOT: argv.directory || process.cwd(),
         FILEFILTER: argv.filter,
-        MIMEFILTER: argv.mimefilter
+        MIMEFILTER: argv.mimefilter,
+        MAXSIZE: argv.maxsize * 1024 * 1024
     };
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
+    dso('--secure:', 'secure' in argv ? argv.secure : 'undefined');
+    dso('--maxsize:', argv.maxsize, 'MB');
+    dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'undefined'); // preserve 'true' for no value
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
     dso('--mimefilter:', NODEFILEMANAGER.MIMEFILTER);
-    dso('--secure:', 'secure' in argv ? argv.secure : 'undefined');
-    dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'undefined'); // preserve 'true' for no value
 
     // Start Server
     let startServer = function (app, port) {
