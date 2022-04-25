@@ -165,14 +165,12 @@ let defaultMimeFilter = (
         });
 
         app.use(async function auth(ctx, next) {
-            debug('fm:auth')('check');
-
             let check = basic.check(function basicCheck(req, res, err) {
                 if (err) {
-                    debug('fm:auth:error')(err);
+                    debug('fm:auth:error')(req.user, err);
                     throw err;
                 } else {
-                    debug('fm:auth')('passed.');
+                    debug('fm:auth:passed')(req.user);
                 }
             });
 
