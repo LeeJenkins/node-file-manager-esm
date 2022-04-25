@@ -77,6 +77,7 @@ So we can use it as koa app, mounted within another koa instance.
 - handling of canceled files (v3.2.0)
 - full standalone support (v3.2.0)
   - relative paths support for `--directory` and `--secure` (v3.2.0) 
+- file renaming if error named file exists and alike (v3.2.1) 
 
 # Note about ES6: ESM support
 The `Michael Jackson Script` or `.mjs` (or` modular JS`) extension is used by NodeJs to detect ECMAScript Modules with the `--experimental-modules` flag in NodeJS prior to v13. Since Babel does have problems `import.meta`, the `esm` npm module is used to transpill the code for older node versions. See the files within the `./bin` folder.
