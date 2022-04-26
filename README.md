@@ -5,65 +5,76 @@
 
 # Usage
 
+## koa app: how to mount
+
+```js
+import fm from 'node-file-manager-esm';
+// see CLI params below: -d & -f & -mf & -m (only -d is required)
+let appFm = fm('/tmp/uploadpath', 'zip|txt|mp4', 'image/*', 300).app;
+
+//mainApp.use(mount('/fm', appFm));  // could be mounted to path on another Koa App
+appFm.listen(8080);
+```
+
+So we can use it as koa app, mounted within another koa instance.
+
 ## as Docker container
 see [DockerHub - docker-node-filemanager-esm](https://hub.docker.com/r/bananaacid/docker-node-filemanager-esm)
 
 ## Standalone / CLI
 Requires Node >= v10.5
 
+**Instant start**: no installation required (linux, osx, win)
 ```shell
-# no installation required (linux, osx, win)
+$ npx node-file-manager-esm --logging --open
+```
+*Show log info the let you know whats going an and open the browser on the UI*
+
+**Instant start**: configure basics - no installation required (linux, osx, win)
+```shell
 $ npx node-file-manager-esm -p 8080 -d /path/to/show --logging --secure --user me:secret --open
 ```
-or
+
+**Install globally** and use on a folder
 ```shell
 $ npm install -g node-file-manager-esm
 $ node-file-manager-esm -p 8080 -d /path/to/show
 ```
-or with port as environment variable (Heroku, Linux, OSX, IIS: iisnode uses the port-env as well)
+
+**Use with port as environment variable** (Heroku, Linux, OSX, IIS: iisnode uses the port-env as well)
 ```shell
 $    PORT=8080 node-file-manager-esm
 \>   set PORT=8080 && node-file-manager-esm
 ps1> $PORT=8080 ; node-file-manager-esm
 ```
 
-Or
 
-```shell
-$ git clone https://github.com/BananaAcid/node-file-manager-esm.git && cd node-file-manager-esm && npm i
-$ node --experimental-modules ./bin/node-file-manager-esm.mjs -p 8080 -d /path/to/show
-```
+**Or use ESM + Node >= v4**
 
-Or use ESM + Node >= v4
-
+Save it to local folder
 ```shell
 $ git clone https://github.com/BananaAcid/node-file-manager-esm.git && cd node-file-manager-esm && npm i && npm i --only=dev
-$ node ./bin/node-file-manager-esm -p 8080 -d /path/to/show
 ```
+
+and Node > v8.9.0 & < v13
+```shell
+$ node --experimental-modules ./bin/node-file-manager-esm.mjs [...PARAMS]
+```
+
 or Node < v12
 ```shell
-$ node -r esm ./bin/node-file-manager-esm.mjs
+$ node -r esm ./bin/node-file-manager-esm.mjs [...PARAMS]
 ```
+
 or Node >= v13
 ```shell
-$ node ./bin/node-file-manager-esm.mjs
+$ node ./bin/node-file-manager-esm.mjs [...PARAMS]
 ```
 
-We can run node-file-manager in terminal directly. We can specify the port add data root dir by `-p` and `-d`, default with 5000 and scripts directory.
+We can run node-file-manager in terminal directly. The port add data root dir can be set by `-p` and `-d`, defaults to 5000 and current directory.
 
-Then, we can view http://localhost:8080/ in our browser.
+Then, we can view http://localhost:5000/ in our browser.
 
-
-
-## koa app: how to mount
-
-```js
-import fm from 'app-filemanager-esm';
-var appFm = fm('/tmp/uploadpath', 'zip|txt|mp4', 'image/*', 300).app; // see CLI params below: -d & -f & -mf & -m (only -d is required)
-mainApp.use(mount('/fm', appFm));
-```
-
-So we can use it as koa app, mounted within another koa instance.
 
 # Major changes in this fork
 - updated to use a recent Koa
