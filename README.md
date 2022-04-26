@@ -24,11 +24,18 @@ see [DockerHub - docker-node-filemanager-esm](https://hub.docker.com/r/bananaaci
 ## Standalone / CLI
 Requires Node >= v10.5
 
+We can run node-file-manager in terminal directly. The port add data root dir can be set by `-p` and `-d`, defaults to 5000 and current directory.
+
+Then, we can view http://localhost:5000/ in our browser.
+
+To make it available over the net, see below `Access it over the internet`.
+
+
 **Instant start**: no installation required (linux, osx, win)
 ```shell
 $ npx node-file-manager-esm --logging --open
 ```
-*Show log info the let you know whats going an and open the browser on the UI*
+*What it does: Show log (`--logging`) info the let you know whats going an and open the browser (`--open`) on the UI showing all files from the current folder*
 
 **Instant start**: configure basics - no installation required (linux, osx, win)
 ```shell
@@ -48,7 +55,7 @@ $    PORT=8080 node-file-manager-esm
 ps1> $PORT=8080 ; node-file-manager-esm
 ```
 
-
+## Standalone on old versions of Node
 **Or use ESM + Node >= v4**
 
 Save it to local folder
@@ -71,9 +78,6 @@ or Node >= v13
 $ node ./bin/node-file-manager-esm.mjs [...PARAMS]
 ```
 
-We can run node-file-manager in terminal directly. The port add data root dir can be set by `-p` and `-d`, defaults to 5000 and current directory.
-
-Then, we can view http://localhost:5000/ in our browser.
 
 
 # Major changes in this fork
@@ -138,7 +142,7 @@ The app is protected with simple http basic auth, so it's recommended to use it 
 ### Shortcut
 Google for "online htpasswd generator". The more secure way is getting the required tools to generate a htpasswd file.
 
-### Manual setup
+### Manually install password tool
 If you use linux/mac you can simply use `htpasswd` comming with `apache2-utils` (on Debian/Ubuntu)
 
 On Debian/Ubuntu do:
@@ -147,7 +151,9 @@ $ sudo apt-get update
 $ sudo apt-get -y install apache2-utils
 ```
 
-On Mac, it is included.
+On Mac, it is included natively.
+
+On Windows, it is included in XAMPP.
 
 ### Manually add a user
 The following command creates a new `htpasswd` file in the current folder with the user `peter`. After creating a new file copy it into the `lib` dir of the app or append the content of the new file to the existing one.
@@ -157,3 +163,26 @@ htpasswd -c ./htpasswd adam
 # add second
 htpasswd ./htpasswd john
 ```
+
+# Access it over the internet
+
+## Quickly tunnel for free
+After starting the tools, they provide you with a subdomain you can use in a browser from anywhere to access the server.
+
+- [Localtunnel](https://localtunnel.github.io/www/)
+  - run `npx localtunnel -p 5000` and you got a temporary subdomain (naming he subdomain is possible as well)
+  - translates to https with working SSL Certificate
+  - has a warning first time connecting
+- [ngrok.io](https://ngrok.com/)
+  - run `npx ngrok http 5000`
+  - has a 2h timelimit, can be paid for 
+  - SSL Certificate is blocked in Chrome showing a bad warning, http tunnel works fine
+- ... and others
+
+## Port forwarding / Hosting at home
+After setting this up, you are actually hosting the server "Dynamic DNS" style permanently at your device/PC.
+
+- configure your router to forward port 80 from the outside to your device/PC to port 5000
+- now it should be available using your internet IP
+- you can add a free dynmic subdomain using [free.afraid.com](https://freedns.afraid.org/)
+  - in case you got a domain, you can add a subdomain and CNAME it to the freedns domain
