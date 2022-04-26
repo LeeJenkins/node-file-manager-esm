@@ -13,7 +13,7 @@ Requires Node >= v10.5
 
 ```shell
 # no installation required (linux, osx, win)
-$ npx node-file-manager-esm -p 8080 -d /path/to/show --logging --secure --open
+$ npx node-file-manager-esm -p 8080 -d /path/to/show --logging --secure --user me:secret --open
 ```
 or
 ```shell
@@ -77,7 +77,8 @@ So we can use it as koa app, mounted within another koa instance.
 - handling of canceled files (v3.2.0)
 - full standalone support (v3.2.0)
   - relative paths support for `--directory` and `--secure` (v3.2.0) 
-- file renaming if error named file exists and alike (v3.2.1) 
+- file renaming if error named file exists and alike (v3.2.1)
+- adding users by commandline/env (v3.2.1)
 
 # Note about ES6: ESM support
 The `Michael Jackson Script` or `.mjs` (or` modular JS`) extension is used by NodeJs to detect ECMAScript Modules with the `--experimental-modules` flag in NodeJS prior to v13. Since Babel does have problems `import.meta`, the `esm` npm module is used to transpill the code for older node versions. See the files within the `./bin` folder.
@@ -93,22 +94,28 @@ node-file-manager-esm -p 8080 -d /path/to/show --logging --secure /path/to/htpas
 ## CLI params
 There are some configuration options for the commandline
 
-- `-p`  | `--port <int>` -- [5000] can be set as environment variable PORT 
-- `-d`  | `--directory <string>` -- [current path] the path to provide the files from (realative path possible: `./data`)
-- `-s`  | `--secure <string>` -- [] is off by default, set it use BASIC-AUTH with the .htpasswd of the path provided, or leave empty for the htpasswd within the bin directory (default login is adam:adam) (realative path possible: `./htpasswd`)
-- `-m`  | `--maxsize <int>` -- [300] the max file size for uploads in MB
-- `-l`  | `--logging <string>` -- [] output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`] To see all possible output, set `DEBUG=*`
-- `-f`  | `--filter <string|null>` -- [zip|tar.gz|7z|...] pattern, seperated by `|`
-- `-mf` | `--mimefilter <string>` -- [video/*|audio/*|image/*] only for file selection, example: `video/*|image/*`
-- `-v`  | `--version` -- show the version number
-- `-o`  | `--open` -- Open the website to this service (localhost with selected port)
+- `-p`  | `--port <int>` -- [5000] The server port to use 
+- `-d`  | `--directory <string>` -- [current path] The path to provide the files from (realative path possible: `./data`)
+- `-s`  | `--secure <string>` -- [] Is off by default! Use BASIC-AUTH with the htpasswd of the path provided, or the htpasswd within the current bin directory. [using just `-s` or `--secure` tries to use a `./htpasswd` file] (default if using as a module, login is adam:adam) (realative path possible: `./htpasswd`)
+- `-u`  | `--user <name:pw>` -- [] If `--secure` is used (or `FM_SECURE=true`), users can be added manually. `pw` can be a clear password or a password hash created by `htpasswd` (see below). It will ignore any htpasswd file from `--secure`. Using the commandline, use `--user adam:adam123 --user eve:eve123` Using the environment variable, use `FM_USER="adam:adam123\neve:eve123"`
+- `-m`  | `--maxsize <int>` -- [300] Set the max file size for uploads in MB
+- `-l`  | `--logging <string>` -- [] Output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`
+- `-f`  | `--filter <string|null>` -- [zip|tar.gz|7z|...] Important files to filter for. The pattern is seperated by `|`. Example: zip|mp4|txt
+- `-mf` | `--mimefilter <string>` -- [video/*|audio/*|image/*] Only for file selection upload dialog in the web interface. Example: `video/*|image/*`
+- `-v`  | `--version` -- Show server version
+- `-o`  | `--open` -- Open the website to this service in browser, when the server started (localhost with selected port)
+
+**Note**: 
+- If you got problems selecting any file type for upload, you could set `--filter ""` and `--mimefilter ""` to allow any file.
+- For the password and especially a password hash, be aware of chars that have to be escaped on commandline (yes: windows, mac, linux need it)
 
 ## Environment variables
 Fallback, if no param was used
 
 - `FM_PORT` -- like `--port` -- if no port param was given, tries `FM_PORT` then `PORT` 
 - `FM_DIRECTORY` -- like `--directory`
-- `FM_SECURE` -- like `--secure`
+- `FM_SECURE` -- like `--secure` -- to use `FM_USER` or `--user`, set `FM_SECURE=true`
+- `FM_USER` -- like `--user` -- but multiple users seperated by `\n`
 - `FM_MAXSIZE` -- like `--maxsize`
 - `FM_LOGGING` -- like `--logging`
 - `FM_FILTER` -- like `--filter`

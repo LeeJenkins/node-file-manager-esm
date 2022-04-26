@@ -63,37 +63,46 @@ let defaultMimeFilter = (
         .option('port', {
             alias: 'p',
             default: process.env.FM_PORT || process.env.PORT || 5000,
-            description: 'Server Port'
+            description: 'The server port to use'
         })
         .option('directory', {
             alias: 'd',
             default: process.env.FM_DIRECTORY || undefined,
-            description: 'The path to provide the files from'
+            description: 'The path to provide the files from (realative path possible: `./data`)'
         })
         .option('secure', {
             alias: 's',
             default: process.env.FM_SECURE || undefined,
-            description: 'Use BASIC-AUTH with the htpasswd of the path provided, or the htpasswd within the current bin directory (default login is adam:adam)'
+            description: 'Is off by default! Use BASIC-AUTH with the htpasswd of the path provided, or the htpasswd within the current bin directory. [using just `-s` or `--secure` tries to use a `./htpasswd` file] (default if using as a module, login is adam:adam) (realative path possible: `./htpasswd`)'
+        })
+        .option('user', {
+            // might be rows with `\n` --> env
+            // might be a string -> single `--user`
+            // might be array with each row -> multiple `--user`
+            // FM_USER is 
+            alias: 'u',
+            default: process.env.FM_USER || undefined,
+            description: 'If `--secure` is used (or `FM_SECURE=true`), users can be added manually. `pw` can be a clear password or a password hash created by `htpasswd` (see below). It will ignore any htpasswd file from `--secure`. Using the commandline, use `--user adam:adam123 --user eve:eve123` Using the environment variable, use `FM_USER="adam:adam123\neve:eve123"`'
         })
         .option('maxsize', {
             alias: 'm',
             default: process.env.FM_MAXSIZE || '300',
-            description: 'Set the max filesize in MB'
+            description: 'Set the max file size for uploads in MB'
         })
         .option('logging', {
             alias: 'l',
             default: process.env.FM_LOGGING || undefined,
-            description: 'output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`'
+            description: 'Output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`'
         })
         .option('filter', {
             alias: 'f',
             default: process.env.FM_FILTER || defaultFileFilter,
-            description: 'Important files to filter for. Example: zip|mp4|txt'
+            description: 'Important files to filter for. The pattern is seperated by `|`. Example: zip|mp4|txt'
         })
         .option('mimefilter', {
             alias: 'mf',
             default: process.env.FM_MIMEFILTER || defaultMimeFilter,
-            description: 'Only for file selection. Example: video/*|image/*'
+            description: 'Only for file selection upload dialog in the web interface. Example: `video/*|image/*`'
         })
         .option('version', {
             alias: 'v',
@@ -101,7 +110,7 @@ let defaultMimeFilter = (
         })
         .option('open', {
             alias: 'o',
-            description: 'Open the website to this service'
+            description: 'Open the website to this service in browser, when the server started (localhost with selected port)'
         })
         .option('help', {
             alias: 'h',
@@ -138,6 +147,7 @@ let defaultMimeFilter = (
     dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'undefined'); // preserve 'true' for no value
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
     dso('--mimefilter:', NODEFILEMANAGER.MIMEFILTER);
+    dso('--user:', 'used?', !!argv.user);
 
     // Start Server
     let startServer = function (app, port) {
@@ -157,7 +167,18 @@ let defaultMimeFilter = (
 
     // Enable auth. KOA compatible. htpasswd file.
     if (argv.secure) {
-        let htpasswd = path.resolve(process.cwd(), (typeof argv.secure == 'string' ? argv.secure : './htpasswd'));
+        let htpasswd;
+
+        if (argv.user) {
+            if (Array.isArray(argv.user)) {
+                argv.user = argv.user.join('\n'); // for multi `--user` use, where it would become an array
+            }
+
+            htpasswd = _ => argv.user;
+        }
+        else {
+            htpasswd = path.resolve(process.cwd(), (typeof argv.secure == 'string' ? argv.secure : './htpasswd'));
+        }
 
         let basic = auth.basic({
             realm: 'File Manager',

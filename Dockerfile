@@ -1,21 +1,30 @@
-FROM node:17.1
+FROM node:18
 
 LABEL autorhor="Nabil Redmann (BananaAcid) <repo@bananaacid.de>"
-LABEL version="3.1.1"
+LABEL version="3.2.1"
 LABEL description="Node File Manager Server \
-    on NodeJS 17.1"
+    on NodeJS 18"
 
 #ENV FM_DIRECTORY 
 ENV FM_FILTER zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|md|doc|docx|otf|ppt|pptx|xls|xlsx|csv|indd|jpg|jpeg|heic|heif|png|ps|svg|ai|avi|mp4|mpg|wav|flac|mpeg|mov
+ENV FM_MIMEFILTER video/*|audio/*|image/*
 ENV FM_SECURE ""
+ENV FM_USERS ""
+ENV FM_MAXSIZE 300
 ENV FM_LOGGING *
-
 
 WORKDIR /usr/src/app
 
 
-RUN ln -sf "$(pwd)/example" /data
+RUN mkdir "$(pwd)/data" && mkdir "$(pwd)/secure" 
+
+RUN ln -sf "$(pwd)/data" /data
 VOLUME /data
+
+RUN cp "$(pwd)/example/htpasswd" "$(pwd)/secure/htpasswd"
+RUN ln -sf "$(pwd)/secure" /secure
+VOLUME /secure
+
 
 COPY . .
 RUN npm install
