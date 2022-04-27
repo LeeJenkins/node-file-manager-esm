@@ -59,11 +59,11 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4>New Folder</h4>
+            <h4>New folder</h4>
           </div>
           <div class="modal-body">
-            <p>Complete Path {{(FM.curFolderPath + FM.newFolderName + '/').replace('//', '/')}}</p>
-            <label class="control-label">Folder Name</label>
+            <p>Complete path {{(FM.curFolderPath + FM.newFolderName + '/').replace('//', '/')}}</p>
+            <label class="control-label">Folder name</label>
             <input class="form-control" autofocus ng-model="FM.newFolderName" />
           </div>
           <div class="modal-footer">
@@ -79,7 +79,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Upload File</h4>
+            <h4>Upload file</h4>
           </div>
 
           <div class="modal-body">
@@ -133,7 +133,7 @@
             <h4>Rename</h4>
           </div>
           <div class="modal-body">
-            <label class="control-label">New Name</label>
+            <label class="control-label">New name</label>
             <input class="form-control" autofocus ng-model="FM.newName" placeholder={{FM.selection[0].name}} />
           </div>
           <div class="modal-footer">
@@ -169,7 +169,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Create Archive</h4>
+            <h4>Create archive</h4>
           </div>
           <div class="modal-body">
             <label class="control-label">Name</label>
@@ -229,14 +229,14 @@
         <div class="btn-group mr-2" role="group" aria-label="">
           <label class="btn btn-primary" style="margin-bottom: 0px;">
             <input type="checkbox" ng-checked="FM.showAllFiles" ng-click="FM.toggleShowAllFiles()">
-            <span>Show All Files</span>
+            <span>Show all files</span>
           </label>
         </div>
 
         <div class="btn-group mr-2" role="group" aria-label="" style="margin-right: 0!important;">
           <button type="button" class="btn btn-primary pull-right" ng-disabled="FM.btnDisabled('create_folder')"
             data-toggle="modal" data-target="#createFolderModal">
-            <i class="fas fa-folder-plus"></i> New Folder</button>
+            <i class="fas fa-folder-plus"></i> New folder</button>
           <button type="button" class="btn btn-primary pull-right" ng-disabled="FM.btnDisabled('upload_file')"
             data-toggle="modal" data-target="#uploadFileModal">
             <i class="fas fa-file-upload"></i> Upload</button>
