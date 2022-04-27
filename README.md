@@ -9,7 +9,7 @@
 
 ```js
 import fm from 'node-file-manager-esm';
-// see CLI params below: -d & -f & -mf & -m (only -d is required)
+// see CLI params below: -d & -f & -mf & -m & -n (only -d is required)
 let appFm = fm('/tmp/uploadpath', 'zip|txt|mp4', 'image/*', 300).app;
 
 //mainApp.use(mount('/fm', appFm));  // could be mounted to path on another Koa App
@@ -115,8 +115,9 @@ There are some configuration options for the commandline
 - `-u`  | `--user <name:pw>` -- [] If `--secure` is used (or `FM_SECURE=true`), users can be added manually. `pw` can be a clear password or a password hash created by `htpasswd` (see below). It will ignore any htpasswd file from `--secure`. Using the commandline, use `--user adam:adam123 --user eve:eve123` Using the environment variable, use `FM_USER="adam:adam123\neve:eve123"`
 - `-m`  | `--maxsize <int>` -- [300] Set the max file size for uploads in MB
 - `-l`  | `--logging <string>` -- [] Output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`
-- `-f`  | `--filter <string|null>` -- [zip|tar.gz|7z|...] Important files to filter for. The pattern is seperated by `|`. Example: zip|mp4|txt
-- `-mf` | `--mimefilter <string>` -- [video/*|audio/*|image/*] Only for file selection upload dialog in the web interface. Example: `video/*|image/*`
+- `-f`  | `--filter <string|null>` -- ["zip|tar.gz|7z|..."] Important files to filter for. The pattern is seperated by `|`. Example: zip|mp4|txt
+- `-mf` | `--mimefilter <string>` -- ["video/*|audio/*|image/*"] Only for file selection upload dialog in the web interface. Example: `video/*|image/*`
+- `-n`  | `--name` .. ["File Manager"] Overwrite the web ui title
 - `-v`  | `--version` -- Show server version
 - `-o`  | `--open` -- Open the website to this service in browser, when the server started (localhost with selected port)
 
@@ -135,6 +136,7 @@ Fallback, if no param was used
 - `FM_LOGGING` -- like `--logging`
 - `FM_FILTER` -- like `--filter`
 - `FM_MIMEFILTER` -- like `--mimefilter`
+- `FM_NAME` -- like `--name`
 
 ## HTTP Basic Auth
 The app is protected with simple http basic auth, so it's recommended to use it just over TLS (HTTPS). Let's Encrypt is your friend. ;)

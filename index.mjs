@@ -26,7 +26,7 @@ if (!__dir_name) {
 const package_json = JSON.parse(await fs.readFile(__dir_name + '/../package.json', 'utf-8'));
 
 // factory
-const fm = function init(pathToWatch, filefilter, mimefilter, maxsize) {
+const fm = function init(pathToWatch, filefilter, mimefilter, maxsize, appname) {
 
   global.NODEFILEMANAGER = {
     BASEPATH: __dirname,
@@ -34,7 +34,8 @@ const fm = function init(pathToWatch, filefilter, mimefilter, maxsize) {
     FILEFILTER: filefilter || 'zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|jpg|png|avi|mp4',
     MIMEFILTER: mimefilter || 'video/*|audio/*|image/*',
     MAXSIZE: (maxsize || 300) * 1024 * 1024,
-    VERSION: package_json.version
+    VERSION: package_json.version,
+    APPNAME: appname || package_json.config.name
   };
 
 

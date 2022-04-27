@@ -12,9 +12,10 @@ ENV FM_SECURE ""
 ENV FM_USERS ""
 ENV FM_MAXSIZE 300
 ENV FM_LOGGING *
+ENV FM_NAME ""
+
 
 WORKDIR /usr/src/app
-
 
 RUN mkdir "$(pwd)/data" && mkdir "$(pwd)/secure" 
 

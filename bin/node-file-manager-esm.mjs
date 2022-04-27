@@ -104,6 +104,11 @@ let defaultMimeFilter = (
             default: process.env.FM_MIMEFILTER || defaultMimeFilter,
             description: 'Only for file selection upload dialog in the web interface. Example: `video/*|image/*`'
         })
+        .option('name', {
+            alias: 'n',
+            default: process.env.FM_NAME || package_json.config.name,
+            description: 'Overwrite the web ui title'
+        })
         .option('version', {
             alias: 'v',
             description: 'Show server version'
@@ -124,12 +129,12 @@ let defaultMimeFilter = (
     }
 
     if (argv.version) {
-        console.log('FileManager', package_json.version);
+        console.log('File Manager', package_json.version);
         process.exit(0);
     }
 
     if (argv.logging) {
-        d('FileManager version ' + package_json.version);
+        d('File Manager version ' + package_json.version);
     }
 
 
@@ -139,8 +144,10 @@ let defaultMimeFilter = (
         FILEFILTER: argv.filter,
         MIMEFILTER: argv.mimefilter,
         MAXSIZE: argv.maxsize * 1024 * 1024,
-        VERSION: package_json.version
+        VERSION: package_json.version,
+        APPNAME: argv.name
     };
+    dso('--name:', NODEFILEMANAGER.APPNAME);
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
     dso('--secure:', 'secure' in argv ? argv.secure : 'undefined');
     dso('--maxsize:', argv.maxsize, 'MB');

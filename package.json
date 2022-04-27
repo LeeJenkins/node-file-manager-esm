@@ -6,6 +6,9 @@
   "engines": {
     "node": ">=10.5"
   },
+  "config": {
+    "name": "File Manager"
+  },
   "scripts": {
     "start": "node ./bin/node-file-manager-esm.mjs --log",
     "start-debug": "DEBUG=* node ./bin/node-file-manager-esm.mjs --log",
