@@ -119,7 +119,7 @@ There are some configuration options for the commandline
 - `-mf` | `--mimefilter <string>` -- ["video/*|audio/*|image/*"] Only for file selection upload dialog in the web interface. Example: `video/*|image/*`
 - `-n`  | `--name` .. ["File Manager"] Overwrite the web ui title
 - `-v`  | `--version` -- Show server version
-- `-o`  | `--open` -- Open the website to this service in browser, when the server started (localhost with selected port)
+- `-o`  | `--open` -- Open the website to this service in browser, when the server started (localhost with selected port) - if `--port` ist not a pipe.
 
 **Note**: 
 - If you got problems selecting any file type for upload, you could set `--filter ""` and `--mimefilter ""` to allow any file.
