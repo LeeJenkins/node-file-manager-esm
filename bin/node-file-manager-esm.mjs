@@ -63,7 +63,7 @@ let defaultMimeFilter = (
         .option('port', {
             alias: 'p',
             default: process.env.FM_PORT || process.env.PORT || 5000,
-            description: 'The server port to use'
+            description: 'The server port to use (or pipe)'
         })
         .option('directory', {
             alias: 'd',
@@ -115,7 +115,7 @@ let defaultMimeFilter = (
         })
         .option('open', {
             alias: 'o',
-            description: 'Open the website to this service in browser, when the server started (localhost with selected port)'
+            description: 'Open the website to this service in browser, when the server started (localhost with selected port) - if `--port` ist not a pipe.'
         })
         .option('help', {
             alias: 'h',
@@ -158,7 +158,7 @@ let defaultMimeFilter = (
 
     // Start Server
     let startServer = function (app, port) {
-        app.listen(port, function () { if (argv.open) open('http://localhost:' + port); });
+        app.listen(port, function () { if (argv.open && !isNaN(port)) open('http://localhost:' + port); });
         d('listening on *:' + port);
     };
 
@@ -214,6 +214,6 @@ let defaultMimeFilter = (
     app.use(koaStatic(path.join(NODEFILEMANAGER.BASEPATH, './lib/public/')));
 
 
-    startServer(app, +argv.port);
+    startServer(app, argv.port);
 
 })()
