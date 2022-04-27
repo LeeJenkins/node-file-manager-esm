@@ -30,7 +30,7 @@
     "koa-router": "^8.0.7",
     "koa-static": "^5.0.0",
     "open": "^7.0.2",
-    "optimist": "^0.6.1"
+    "optimist": "^0.5.2"
   },
   "repository": {
     "type": "git",
