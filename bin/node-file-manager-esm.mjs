@@ -166,10 +166,10 @@ let defaultMimeFilter = (
     app.name = 'filemanager';
 
     app.proxy = true;
+    app.on('error', Tools.handleAppError);
     app.use(Tools.logTraffic);
     app.use(Tools.handleError);
     app.use(Tools.realIp);
-
 
 
     // Enable auth. KOA compatible. htpasswd file.

@@ -11,9 +11,7 @@
 
 import Koa from 'koa';
 import path from 'path';
-import mount from 'koa-mount';
 import koaStatic from 'koa-static';
-import debug from 'debug';
 import Tools from './lib/tools';
 import IndexRouter from './lib/routes';
 
@@ -42,6 +40,7 @@ const fm = function init(pathToWatch, filefilter, mimefilter, maxsize, appname) 
   var app = new Koa();
 
   app.proxy = true;
+  app.on('error', Tools.handleAppError);
   app.use(Tools.logTraffic);
   app.use(Tools.handelError);
   app.use(Tools.realIp);
