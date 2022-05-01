@@ -1,6 +1,6 @@
 {
   "name": "node-file-manager-esm",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "A simple file manager, based on Koa and Angular.js. Standalone, Koa-mountable. Import-able as ES6 and Babel module.",
   "main": "index.mjs",
   "engines": {
@@ -13,7 +13,7 @@
     "start": "node ./bin/node-file-manager-esm.mjs --log",
     "start-debug": "DEBUG=* node ./bin/node-file-manager-esm.mjs --log",
     "start-esm": "DEBUG=* node ./bin/node-file-manager-esm",
-    "start-if-docker": "node -r esm ./bin/node-file-manager-esm.mjs -d /data",
+    "start-if-docker": "node ./bin/node-file-manager-esm.mjs -d /data",
     "docker": "make"
   },
   "bin": {

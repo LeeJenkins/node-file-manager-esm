@@ -17,22 +17,24 @@ ENV FM_NAME ""
 
 WORKDIR /usr/src/app
 
+COPY . .
+
+
 RUN mkdir "$(pwd)/data" && mkdir "$(pwd)/secure" 
 
 RUN ln -sf "$(pwd)/data" /data
 VOLUME /data
 
-RUN cp "$(pwd)/example/htpasswd" "$(pwd)/secure/htpasswd"
+RUN cp "$(pwd)/bin/htpasswd" "$(pwd)/secure/htpasswd"
 RUN ln -sf "$(pwd)/secure" /secure
 VOLUME /secure
 
 
-COPY . .
 RUN npm install
 
 RUN npm install pm2 -g 2>/dev/null 
 
-RUN mkdir /root/.npm/_logs
+RUN mkdir -p /root/.npm/_logs
 RUN ln -sf /root/.npm/_logs /logs
 VOLUME /logs
 
