@@ -22,7 +22,7 @@ Exposed are
 
 - `/data` for the folder to use
 - `/logs` for the folder to save any logs to
-- `/secure` for the folder where the htpasswd file is
+- `/secure` for the folder where the `htpasswd` file is (to be used as `FM_SECURE=/secure/htpasswd`)
 
 ## Use
 

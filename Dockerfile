@@ -1,6 +1,6 @@
 FROM node:18
 
-LABEL autorhor="Nabil Redmann (BananaAcid) <repo@bananaacid.de>"
+LABEL author="Nabil Redmann (BananaAcid) <repo@bananaacid.de>"
 LABEL version="3.2.1"
 LABEL description="Node File Manager Server \
     on NodeJS 18"
