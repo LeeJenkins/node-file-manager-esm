@@ -99,6 +99,7 @@ $ node ./bin/node-file-manager-esm.mjs [...PARAMS]
 - adding users by commandline/env (v3.3.1)
 - fixed env presented to docker to be FM_USER (v3.3.2)
 - added compose file (v3.3.2)
+- reducing docker image from 1GB to 211MB (v3.3.3)
 
 # Note about ES6: ESM support
 The `Michael Jackson Script` or `.mjs` (or` modular JS`) extension is used by NodeJs to detect ECMAScript Modules with the `--experimental-modules` flag in NodeJS prior to v13. Since Babel does have problems `import.meta`, the `esm` npm module is used to transpill the code for older node versions. See the files within the `./bin` folder.

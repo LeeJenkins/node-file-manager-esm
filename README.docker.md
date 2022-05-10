@@ -48,6 +48,7 @@ Exposed are
 - adding users by commandline/env (v3.3.1)
 - fixed env presented to docker to be FM_USER (v3.3.2)
 - added compose file (v3.3.2)
+- reducing docker image from 1GB to 211MB (v3.3.3)
 
 ## docker-compose.yaml
 ```yaml

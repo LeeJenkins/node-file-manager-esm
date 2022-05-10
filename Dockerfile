@@ -1,7 +1,7 @@
-FROM node:18
+FROM node:18-alpine
 
 LABEL author="Nabil Redmann (BananaAcid) <repo@bananaacid.de>"
-LABEL version="3.3.2"
+LABEL version="3.3.3"
 LABEL description="Node File Manager Server \
     on NodeJS 18"
 
