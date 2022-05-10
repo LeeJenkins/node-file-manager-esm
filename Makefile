@@ -16,14 +16,12 @@ run-win:
 # just remove the image
 rmi:
 	docker rmi docker-node-filemanager-esm --force
-	echo "reopen Kitematic to update correctly / use CTRL+R to reload / CMD+R to reload"
 
 # stop container and delete its image from docker
 kill:
 	docker rm `docker stop \`docker ps -a -q  --filter ancestor=docker-node-filemanager-esm\``
-	#docker kill `docker ps -a -q  --filter ancestor=docker-node-filemanager-esm`
+	# docker kill `docker ps -a -q  --filter ancestor=docker-node-filemanager-esm`
 	docker rmi docker-node-filemanager-esm --force
-	echo "reopen Kitematic to update correctly / use CTRL+R to reload / CMD+R to reload"
 
 
 id:

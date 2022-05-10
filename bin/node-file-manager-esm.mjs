@@ -149,9 +149,9 @@ let defaultMimeFilter = (
     };
     dso('--name:', NODEFILEMANAGER.APPNAME);
     dso('--directory:', NODEFILEMANAGER.DATA_ROOT);
-    dso('--secure:', 'secure' in argv ? argv.secure : 'undefined');
+    dso('--secure:', 'secure' in argv ? argv.secure : 'not set');
     dso('--maxsize:', argv.maxsize, 'MB');
-    dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'undefined'); // preserve 'true' for no value
+    dso('--logging:', 'logging' in argv ? (argv.logging === true ? true : argv_logging) : 'not set'); // preserve 'true' for no value
     dso('--filter:', NODEFILEMANAGER.FILEFILTER);
     dso('--mimefilter:', NODEFILEMANAGER.MIMEFILTER);
     dso('--user:', 'used?', !!argv.user);

@@ -1,7 +1,7 @@
 FROM node:18
 
 LABEL author="Nabil Redmann (BananaAcid) <repo@bananaacid.de>"
-LABEL version="3.2.1"
+LABEL version="3.3.2"
 LABEL description="Node File Manager Server \
     on NodeJS 18"
 
@@ -9,7 +9,7 @@ LABEL description="Node File Manager Server \
 ENV FM_FILTER zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|md|doc|docx|otf|ppt|pptx|xls|xlsx|csv|indd|jpg|jpeg|heic|heif|png|ps|svg|ai|avi|mp4|mpg|wav|flac|mpeg|mov
 ENV FM_MIMEFILTER video/*|audio/*|image/*
 ENV FM_SECURE ""
-ENV FM_USERS ""
+ENV FM_USER ""
 ENV FM_MAXSIZE 300
 ENV FM_LOGGING *
 ENV FM_NAME ""

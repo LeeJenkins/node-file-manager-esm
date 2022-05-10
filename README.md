@@ -1,7 +1,10 @@
-# node-file-manager-esm
+# File Manager
+
 ![screenshot v3](https://user-images.githubusercontent.com/1894723/74705515-7a209280-5214-11ea-8547-79287118ef43.png)
 
+File manager web server based on Node.js with Koa, Angular.js and Bootstrap, updated to use a recent Koa and be mount compatible and is rewritten to be an ECMAScript Module (or Babel). Has multi file upload. Reduced dependencies. Usable from cli.
 
+Supported: ESM-importable, standalone, docker
 
 # Usage
 
@@ -92,8 +95,10 @@ $ node ./bin/node-file-manager-esm.mjs [...PARAMS]
 - handling of canceled files (v3.2.0)
 - full standalone support (v3.2.0)
   - relative paths support for `--directory` and `--secure` (v3.2.0) 
-- file renaming if error named file exists and alike (v3.2.1)
-- adding users by commandline/env (v3.2.1)
+- file renaming if error named file exists and alike (v3.3.1)
+- adding users by commandline/env (v3.3.1)
+- fixed env presented to docker to be FM_USER (v3.3.2)
+- added compose file (v3.3.2)
 
 # Note about ES6: ESM support
 The `Michael Jackson Script` or `.mjs` (or` modular JS`) extension is used by NodeJs to detect ECMAScript Modules with the `--experimental-modules` flag in NodeJS prior to v13. Since Babel does have problems `import.meta`, the `esm` npm module is used to transpill the code for older node versions. See the files within the `./bin` folder.
@@ -111,7 +116,7 @@ There are some configuration options for the commandline
 
 - `-p`  | `--port <int>` -- [5000] The server port to use 
 - `-d`  | `--directory <string>` -- [current path] The path to provide the files from (realative path possible: `./data`)
-- `-s`  | `--secure <string>` -- [] Is off by default! Use BASIC-AUTH with the htpasswd of the path provided, or the htpasswd within the current bin directory. [using just `-s` or `--secure` tries to use a `./htpasswd` file] (default if using as a module, login is adam:adam) (realative path possible: `./htpasswd`)
+- `-s`  | `--secure <string>` -- [] Is off by default! Use BASIC-AUTH with the htpasswd of the path provided. [using just `-s` or `--secure` tries to use a `./htpasswd` file] (default if using as a module, login is adam:adam) (realative path possible: `./htpasswd`)
 - `-u`  | `--user <name:pw>` -- [] If `--secure` is used (or `FM_SECURE=true`), users can be added manually. `pw` can be a clear password or a password hash created by `htpasswd` (see below). It will ignore any htpasswd file from `--secure`. Using the commandline, use `--user adam:adam123 --user eve:eve123` Using the environment variable, use `FM_USER="adam:adam123\neve:eve123"`
 - `-m`  | `--maxsize <int>` -- [300] Set the max file size for uploads in MB
 - `-l`  | `--logging <string>` -- [] Output logging info [using just `-l` or `--logging` resolves to `--logging "*"` and can be set as environment variable with `DEBUG=fm:*` as well. `-l traffic` will only show `fm:traffic`]  To see all possible output, set `DEBUG=*`
@@ -158,7 +163,7 @@ On Mac, it is included natively.
 On Windows, it is included in XAMPP.
 
 ### Manually add a user
-The following command creates a new `htpasswd` file in the current folder with the user `peter`. After creating a new file copy it into the `lib` dir of the app or append the content of the new file to the existing one.
+The following command creates a new `htpasswd` file in the current folder with the user `adam`. After creating a new file copy it into a parent folder of your data folder (in case of docker, into the `secure/` folder) or append the content of the new file to the existing one.
 ```bash
 # new file:
 htpasswd -c ./htpasswd adam

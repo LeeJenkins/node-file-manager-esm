@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  file-manager:
+    image: bananaacid/docker-node-filemanager-esm:latest
+    restart: unless-stopped
+    container_name: file-manager
+    hostname: file-manager
+
+    environment:
+      FM_FILTER: "zip|tar.gz|7z|7zip|tar|gz|tgz|tbz|tar.bz2|tar.bz|txt|md|doc|docx|otf|ppt|pptx|xls|xlsx|csv|indd|jpg|jpeg|heic|heif|png|ps|svg|ai|avi|mp4|mpg|wav|flac|mpeg|mov"
+      FM_MIMEFILTER: "video/*|audio/*|image/*"
+      FM_SECURE:
+      FM_USER:
+      FM_MAXSIZE: 300
+      FM_LOGGING: "*"
+      FM_NAME: 
+    expose:
+      - "5000"
+    volumes:
+      - /data
+      - /logs
+      - /secure
+networks:
+  filemanager:
