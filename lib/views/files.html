@@ -194,10 +194,15 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">%appname%</a> <small>v.%version%</small>
         </div>
+        <div class="navbar-right">
+          <button type="button" class="btn btn-outline-primary" ng-click="FM.logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
       </div>
     </nav>
 
-    <div class="container" style="margin-top: 3em; margin-bottom: 2em;">
+    <div name="directory-view-button-bar" ng-if="showDirectoryListing" class="container buttonBar">
       <div class="btn-toolbar" style="justify-content: space-between;">
         <div class="btn-group mr-2" role="group" aria-label="">
           <button type="button" class="btn btn-primary" ng-disabled="FM.btnDisabled('download')"
@@ -251,7 +256,7 @@
       </ol>
     </div>
 
-    <div class="container">
+    <div name="directory-view-content" ng-if="showDirectoryListing" class="container">
       <table class="table table-hover table-striped">
         <thead>
           <tr class="sortable">
@@ -284,8 +289,34 @@
           </tr>
         </tbody>
       </table>
-
     </div>
+
+    <div name="file-view-content" class="container file-viewer" ng-if="showFileViewer">
+      <div class="btn-toolbar">
+        <button type="button" class="btn btn-primary" ng-click="closeFileViewer()">Close</button>
+        <!-- Additional buttons can be added here -->
+      </div>
+      <div class="content-area" ng-if="fileUrl">
+        <div ng-if="fileType.startsWith('image/')">
+          <img ng-src="{{fileUrl}}" alt="{{fileName}}" class="img-fluid">
+        </div>
+        <div ng-if="fileType.startsWith('video/')">
+          <video controls>
+            <source ng-src="{{fileUrl}}" type="{{fileType}}">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <div class="content-container" ng-if="fileType === 'application/pdf'">
+          <object ng-src="{{fileUrl}}" type="application/pdf" width="100%">
+            <embed ng-src="{{fileUrl}}" type="application/pdf"/>
+          </object>
+        </div>
+        <div class="content-container" ng-if="fileType.startsWith('text/')">
+          <textarea id="text-file-content" style="width: 100%; height: 100%;" readonly>{{fileData}}</textarea>
+        </div>
+      </div>
+    </div>
+
   </body>
 
 </html>
