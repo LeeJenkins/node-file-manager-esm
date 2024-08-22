@@ -112,3 +112,66 @@ label.btn {
     line-height: 1;
     margin-right: 1em;
 }
+
+table.table td {
+    padding: 0.25rem 0.75rem;
+}
+
+.lowkey {
+    color: #333;
+}
+
+/* Make the file-viewer container a flex container */
+.file-viewer {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 56px); /* Full height of the viewport */
+    overflow: hidden; /* Hide overflow for proper scrolling */
+}
+
+/* Button bar should not grow and stay fixed at the top */
+.file-viewer .button-bar {
+    flex: 0 0 auto; /* Fixed height */
+    padding: 10px;
+}
+
+/* Content area should grow and take up available space */
+.file-viewer .content-area {
+    flex: 1 1 auto; /* Grow to take up available space */
+    overflow-y: auto; /* Enable scrolling if content overflows */
+    height: calc(100vh - 98px);
+    padding: 5px;
+    background-color: #fff;
+}
+
+/* Example styles for different content types */
+.file-viewer .content-area img,
+.file-viewer .content-area video,
+.file-viewer .content-area iframe,
+.file-viewer .content-area object,
+.file-viewer .content-area object embed {
+    width: 100%;
+    max-height: 100%;
+}
+
+/* Ensure that the content inside iframe or object adjusts */
+.file-viewer .content-area iframe,
+.file-viewer .content-area object,
+.file-viewer .content-area object embed {
+    height: 100%;
+}
+
+.file-viewer .content-container {
+    width: 100%;
+    height: 100%;
+}
+
+.file-viewer textarea {
+    flex: 1;
+    resize: none;
+    overflow: auto;
+    font-family: monospace;
+    padding: 8px;
+    border: 1px solid #999;
+    border-radius: 8px;
+}
