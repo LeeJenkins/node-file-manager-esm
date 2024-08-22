@@ -19,11 +19,14 @@ process.argv.forEach((val, index) => {
 });
 
 
+import http from 'http';
+import https from 'https';
 import url from 'url';
 import auth from 'http-auth';
 import path from 'path';
 import Koa from 'koa';
 import koaStatic from 'koa-static';
+import koaSession from 'koa-session';
 import open from 'open';
 import optimist from 'optimist';
 import Tools from '../lib/tools.mjs';
@@ -41,7 +44,7 @@ if (!__dir_name) {
 // user should have the possibility to set it to '' to allow all.
 let defaultFileFilter = (
     'zip | tar.gz | 7z | 7zip | tar | gz | tgz | tbz | tar.bz2 | tar.bz | ' + // packed files
-    'txt | md | doc | docx | otf | ppt | pptx | xls | xlsx | csv | indd |' + // text and doc formats
+    'txt | pdf | md | rtf | doc | docx | otf | ppt | pptx | xls | xlsx | csv | indd |' + // text and doc formats
     'jpg | jpeg | heic | heif | png | ps |' +  // pixel images
     'svg | ai | ' + // vector images
     'avi | mp4 | mpg | wav | flac | m4a | aac | mpeg | mov ' // media formats
@@ -51,6 +54,8 @@ let defaultMimeFilter = (
     'video/* | audio/* | image/* '  // mime types, important to mobile phones (android)
 ).replaceAll(' ', '');
 
+let defaultCertFile = '';
+let defaultPkeyFile = '';
 
 (async _ => {
 
@@ -113,6 +118,16 @@ let defaultMimeFilter = (
             alias: 'v',
             description: 'Show server version'
         })
+        .option('pkeyfile', {
+            alias: 'k',
+            default: process.env.FM_PKEYFILE || defaultPkeyFile,
+            description: 'Private Key file name'
+        })
+        .option('certfile', {
+            alias: 'c',
+            default: process.env.FM_CERTFILE || defaultCertFile,
+            description: 'HTTPS certificate file name'
+        })
         .option('open', {
             alias: 'o',
             description: 'Open the website to this service in browser, when the server started (localhost with selected port) - if `--port` ist not a pipe.'
@@ -158,7 +173,26 @@ let defaultMimeFilter = (
 
     // Start Server
     let startServer = function (app, port) {
-        app.listen(port, function () { if (argv.open && !isNaN(port)) open('http://localhost:' + port); });
+
+        if (argv.pkeyfile && argv.certfile) {
+            const httpsOptions = {
+                key: fs.readFileSync(argv.pkeyfile, 'utf8').toString(),
+                cert: fs.readFileSync(argv.certfile, 'utf8').toString(),
+            };
+            https.createServer(httpsOptions, app.callback())
+            .listen(port, function () {
+                if (argv.open && !isNaN(port))
+                    open('http://localhost:' + port);
+            });
+        }
+        else {
+            http.createServer(app.callback())
+            .listen(port, function () {
+                if (argv.open && !isNaN(port))
+                    open('http://localhost:' + port);
+            });
+        }
+
         d('listening on *:' + port);
     };
 
@@ -171,6 +205,19 @@ let defaultMimeFilter = (
     app.use(Tools.handleError);
     app.use(Tools.realIp);
 
+    const sessionConfig = {
+        key: 'koa:sess',
+        maxAge: 15 * 60 * 1000, // Session timeout set to 15 minutes
+        autoCommit: true,
+        overwrite: true,
+        httpOnly: true,
+        signed: false,
+        rolling: true,
+        renew: true, // Renew session when it's about to expire
+    };
+    
+    // Use koaSession middleware
+    app.use(koaSession(sessionConfig, app));
 
     // Enable auth. KOA compatible. htpasswd file.
     if (argv.secure) {
@@ -206,6 +253,31 @@ let defaultMimeFilter = (
 
             await next();
         });
+
+        // app.use(async (ctx) => {
+        //     if (!ctx.session.user) {
+        //         ctx.status = 401;
+        //         ctx.body = 'Unauthorized';
+        //         return;
+        //     }
+        //     await next();
+        // });
+        
+        // // Add a route for logout
+        // app.use(async (ctx, next) => {
+        //     if (ctx.path === '/logout' && ctx.method === 'POST') {
+        //         console.log(`received POST /logout`);
+        //         ctx.session = null; // Clear the session
+        //         ctx.status = 200;
+        //         ctx.body = { message: 'Logged out successfully' };
+        //         console.log(`ctx:`);
+        //         console.log(`\t session = ${ctx.session}`);
+        //         console.log(`\t status = ${ctx.status}`);
+        //         console.log(`\t body = ${JSON.stringify(ctx.body)}`);
+        //         return;
+        //     }
+        //     await next();
+        // });
     }
 
 
