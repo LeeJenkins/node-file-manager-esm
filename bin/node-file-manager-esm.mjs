@@ -22,15 +22,14 @@ process.argv.forEach((val, index) => {
 import http from 'http';
 import https from 'https';
 import url from 'url';
-import auth from 'http-auth';
 import path from 'path';
 import Koa from 'koa';
 import koaStatic from 'koa-static';
-import koaSession from 'koa-session';
 import open from 'open';
 import optimist from 'optimist';
 import Tools from '../lib/tools.mjs';
 import IndexRouter from '../lib/routes.mjs';
+import authManager from '../lib/authManager.mjs';
 
 const d = debug('fm:start');
 const dso = debug('fm:options');
@@ -204,20 +203,7 @@ let defaultPkeyFile = '';
     app.use(Tools.logTraffic);
     app.use(Tools.handleError);
     app.use(Tools.realIp);
-
-    const sessionConfig = {
-        key: 'koa:sess',
-        maxAge: 15 * 60 * 1000, // Session timeout set to 15 minutes
-        autoCommit: true,
-        overwrite: true,
-        httpOnly: true,
-        signed: false,
-        rolling: true,
-        renew: true, // Renew session when it's about to expire
-    };
-    
-    // Use koaSession middleware
-    app.use(koaSession(sessionConfig, app));
+    app.use(koaStatic(path.join(NODEFILEMANAGER.BASEPATH, './lib/public/')));
 
     // Enable auth. KOA compatible. htpasswd file.
     if (argv.secure) {
@@ -227,64 +213,18 @@ let defaultPkeyFile = '';
             if (Array.isArray(argv.user)) {
                 argv.user = argv.user.join('\n'); // for multi `--user` use, where it would become an array
             }
-
             htpasswd = _ => argv.user;
         }
         else {
             htpasswd = path.resolve(process.cwd(), (typeof argv.secure == 'string' ? argv.secure : './htpasswd'));
         }
-
-        let basic = auth.basic({
-            realm: 'File Manager',
-            file: htpasswd
-        });
-
-        app.use(async function auth(ctx, next) {
-            let check = basic.check(function basicCheck(req, res, err) {
-                if (err) {
-                    debug('fm:auth:error')(req.user, err);
-                    throw err;
-                } else {
-                    debug('fm:auth:passed')(req.user);
-                }
-            });
-
-            check(ctx.req, ctx.res);
-
-            await next();
-        });
-
-        // app.use(async (ctx) => {
-        //     if (!ctx.session.user) {
-        //         ctx.status = 401;
-        //         ctx.body = 'Unauthorized';
-        //         return;
-        //     }
-        //     await next();
-        // });
-        
-        // // Add a route for logout
-        // app.use(async (ctx, next) => {
-        //     if (ctx.path === '/logout' && ctx.method === 'POST') {
-        //         console.log(`received POST /logout`);
-        //         ctx.session = null; // Clear the session
-        //         ctx.status = 200;
-        //         ctx.body = { message: 'Logged out successfully' };
-        //         console.log(`ctx:`);
-        //         console.log(`\t session = ${ctx.session}`);
-        //         console.log(`\t status = ${ctx.status}`);
-        //         console.log(`\t body = ${JSON.stringify(ctx.body)}`);
-        //         return;
-        //     }
-        //     await next();
-        // });
+        authManager.setAuthType('basic', {app, realm: argv.name, file: htpasswd});
+    }
+    else {
+        authManager.setAuthType('none', {app});
     }
 
-
     app.use(IndexRouter);
-
-    app.use(koaStatic(path.join(NODEFILEMANAGER.BASEPATH, './lib/public/')));
-
 
     startServer(app, argv.port);
 

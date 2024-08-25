@@ -195,14 +195,34 @@
           <a class="navbar-brand" href="#">%appname%</a> <small>v.%version%</small>
         </div>
         <div class="navbar-right">
-          <button type="button" class="btn btn-outline-primary" ng-click="FM.logout()">
+          <button type="button" class="btn btn-outline-primary" ng-click="FM.logout()" ng-if="isLoggedIn">
             <i class="fas fa-sign-out-alt"></i> Logout
           </button>
         </div>
       </div>
     </nav>
 
-    <div name="directory-view-button-bar" ng-if="showDirectoryListing" class="container buttonBar">
+    <div name="login-view" class="container" ng-if="!isLoggedIn">
+      <div name="basic-auth-login-info" ng-if="isAuthBasic">
+        <div name="basic-auth-login-info" ng-if="isLoginQuery">
+          <p>checking login status...</p>
+        </div>
+        <div name="basic-auth-unauthorized" ng-if="!isLoginQuery">
+          <h2>Login Required</h2>
+          <p>Reload the page for the login prompt</p>
+        </div>
+      </div>
+      <div id="loginForm" ng-if="isAuthRest">
+        <h4>Login</h4>
+        <label class="control-label">user name</label>
+        <input class="form-control" autofocus ng-model="FM.loginUserName" />
+        <label class="control-label">password</label>
+        <input class="form-control" autofocus ng-model="FM.loginPassword" type="password"/>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="FM.login()">Login</button>
+      </div>
+    </div>
+
+    <div name="directory-view-button-bar" ng-if="showDirectoryListing && (isLoggedIn || isAuthNone)" class="container buttonBar">
       <div class="btn-toolbar" style="justify-content: space-between;">
         <div class="btn-group mr-2" role="group" aria-label="">
           <button type="button" class="btn btn-primary" ng-disabled="FM.btnDisabled('download')"
@@ -256,7 +276,7 @@
       </ol>
     </div>
 
-    <div name="directory-view-content" ng-if="showDirectoryListing" class="container">
+    <div name="directory-view-content" ng-if="showDirectoryListing && (isLoggedIn || isAuthNone)" class="container">
       <table class="table table-hover table-striped">
         <thead>
           <tr class="sortable">
