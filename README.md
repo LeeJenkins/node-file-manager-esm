@@ -81,9 +81,12 @@ or Node >= v13
 $ node ./bin/node-file-manager-esm.mjs [...PARAMS]
 ```
 
-
-
 # Major changes in this fork
+- https support
+- file viewing by mime type
+- auth-type framework and logout
+
+# Major changes in previous fork
 - updated to use a recent Koa
 - be koa-mount compatible
 - rewritten to be an ECMAScript Module (or Babel), works with both as well as the preferred `esm` module
